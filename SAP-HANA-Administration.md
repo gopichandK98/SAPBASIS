@@ -96,8 +96,6 @@ Memory and storage are critical in HANA because the system is optimized for in-m
 
 ## 7. High Availability and Disaster Recovery
 HANA environments may support:
-- System replication
-- Failover configurations
 - Backup copies for disaster recovery
 - Multi-host or scale-out setups
 
