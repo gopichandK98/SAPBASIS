@@ -1,0 +1,177 @@
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Main navigation">
+    <a class="brand" href="#" (click)="setView('overview'); $event.preventDefault()">
+      <span class="brand-mark" aria-hidden="true">S</span>
+      <span class="brand-copy">
+        <strong>sap<span>learn</span></strong>
+        <small>YOUR TECHNICAL HUB</small>
+      </span>
+    </a>
+
+    <div class="nav-label">WORKSPACE</div>
+    <nav class="main-nav">
+      <button type="button" class="nav-item" [class.active]="activeView === 'overview'" (click)="setView('overview')">
+        <span class="nav-icon" aria-hidden="true">⌂</span> Overview
+      </button>
+      <button type="button" class="nav-item" [class.active]="activeView === 'roadmap'" (click)="setView('roadmap')">
+        <span class="nav-icon" aria-hidden="true">⌁</span> Learning path
+      </button>
+      <button type="button" class="nav-item" [class.active]="activeView === 'modules'" (click)="setView('modules')">
+        <span class="nav-icon" aria-hidden="true">▦</span> SAP modules
+        <span class="nav-count">7</span>
+      </button>
+      <button type="button" class="nav-item" [class.active]="activeView === 'hana'" (click)="setView('hana')">
+        <span class="nav-icon" aria-hidden="true">◈</span> HANA admin
+      </button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-tip">
+        <span class="tip-spark" aria-hidden="true">✦</span>
+        <strong>Keep it practical</strong>
+        <p>Learn a concept, try it in a sandbox, then explain it in your own words.</p>
+        <button type="button" (click)="setView('roadmap')">View your roadmap <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="profile">
+        <div class="avatar" aria-hidden="true">L</div>
+        <div><strong>Learning space</strong><small>Personal workspace</small></div>
+        <span class="profile-menu" aria-hidden="true">···</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div class="breadcrumb"><span>Workspace</span><span class="crumb-slash">/</span><strong>{{ pageTitle }}</strong></div>
+      <label class="search-box">
+        <span aria-hidden="true">⌕</span>
+        <input type="search" placeholder="Search SAP modules..." [value]="searchTerm" (input)="updateSearch($event)" aria-label="Search SAP modules">
+      </label>
+      <button type="button" class="icon-button notification-button" aria-label="Notifications">
+        <span aria-hidden="true">♧</span><i></i>
+      </button>
+    </header>
+
+    @if (activeView === 'overview') {
+      <section class="page">
+        <div class="welcome-row">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-dot"></span> YOUR SAP JOURNEY STARTS HERE</div>
+            <h1>Build your SAP<br><span>know-how.</span></h1>
+            <p class="welcome-copy">A clear path from business processes to technical depth.<br class="desktop-break"> Learn one concept at a time, and make it stick.</p>
+            <button type="button" class="primary-button" (click)="setView('roadmap')">Explore learning path <span aria-hidden="true">→</span></button>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+            <div class="hero-core">SAP<span>✳</span></div>
+            <div class="float-card float-card-top"><span class="mini-icon mint">↗</span><span><b>Learn by doing</b><small>Practical, step by step</small></span></div>
+            <div class="float-card float-card-bottom"><span class="mini-icon lilac">◎</span><span><b>One clear roadmap</b><small>Built for steady progress</small></span></div>
+            <span class="spark spark-one">✦</span><span class="spark spark-two">✧</span>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <div class="stat-icon stat-violet" aria-hidden="true">⌁</div>
+            <div><span class="stat-label">LEARNING STAGES</span><strong>07</strong><small>From foundations to support</small></div>
+            <span class="stat-decoration violet-decoration" aria-hidden="true">↗</span>
+          </article>
+          <article class="stat-card">
+            <div class="stat-icon stat-green" aria-hidden="true">✓</div>
+            <div><span class="stat-label">YOUR PROGRESS</span><strong>{{ completedStages.size }} <em>/ 7</em></strong><small>{{ progressPercent }}% of your roadmap</small></div>
+            <span class="stat-decoration green-decoration" aria-hidden="true">◌</span>
+          </article>
+          <article class="stat-card">
+            <div class="stat-icon stat-orange" aria-hidden="true">▦</div>
+            <div><span class="stat-label">SAP MODULES</span><strong>07</strong><small>Explore connected business areas</small></div>
+            <span class="stat-decoration orange-decoration" aria-hidden="true">◫</span>
+          </article>
+        </div>
+
+        <div class="section-heading">
+          <div><span class="eyebrow">A GOOD PLACE TO BEGIN</span><h2>Your learning roadmap</h2></div>
+          <button type="button" class="text-button" (click)="setView('roadmap')">View full roadmap <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="roadmap-preview">
+          @for (stage of stages.slice(0, 3); track stage.number) {
+            <article class="stage-row">
+              <span class="stage-number" [class.stage-done]="completedStages.has(stage.number)">{{ completedStages.has(stage.number) ? '✓' : stage.number }}</span>
+              <div class="stage-info"><strong>{{ stage.title }}</strong><p>{{ stage.summary }}</p></div>
+              <span class="stage-duration">{{ stage.duration }}</span>
+              <button type="button" class="row-arrow" [attr.aria-label]="'View ' + stage.title" (click)="setView('roadmap')">↗</button>
+            </article>
+          }
+        </div>
+      </section>
+    } @else if (activeView === 'roadmap') {
+      <section class="page">
+        <div class="page-intro">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> LEARN IN DEPENDENCY ORDER</div>
+          <h1>Your learning <span>roadmap.</span></h1>
+          <p>Seven focused stages take you from SAP fundamentals to practical technical support. Take the time you need—steady progress beats rushing.</p>
+        </div>
+        <div class="progress-panel">
+          <div><strong>Your progress</strong><span>{{ completedStages.size }} of {{ stages.length }} stages complete</span></div>
+          <div class="progress-track"><span [style.width.%]="progressPercent"></span></div>
+          <strong class="progress-percent">{{ progressPercent }}%</strong>
+        </div>
+        <div class="stage-list">
+          @for (stage of stages; track stage.number) {
+            <article class="learning-card" [class.completed-card]="completedStages.has(stage.number)">
+              <div class="learning-card-top">
+                <span class="stage-number" [class.stage-done]="completedStages.has(stage.number)">{{ completedStages.has(stage.number) ? '✓' : stage.number }}</span>
+                <span class="stage-duration">{{ stage.duration }}</span>
+              </div>
+              <h2>{{ stage.title }}</h2>
+              <p>{{ stage.summary }}</p>
+              <div class="topic-list">
+                @for (topic of stage.topics; track topic) { <span>{{ topic }}</span> }
+              </div>
+              <button type="button" class="complete-button" [class.complete-active]="completedStages.has(stage.number)" (click)="toggleStage(stage.number)">
+                {{ completedStages.has(stage.number) ? 'Mark as in progress' : 'Mark as complete' }}
+              </button>
+            </article>
+          }
+        </div>
+      </section>
+    } @else if (activeView === 'modules') {
+      <section class="page">
+        <div class="page-intro">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> CONNECT THE BUSINESS</div>
+          <h1>Explore SAP <span>modules.</span></h1>
+          <p>SAP modules support different business functions and share data across an integrated enterprise platform.</p>
+        </div>
+        <div class="module-grid">
+          @for (module of filteredModules; track module.acronym) {
+            <article class="module-card">
+              <div class="module-card-header"><span class="module-badge" [class]="'module-badge ' + module.color">{{ module.acronym }}</span><span class="module-arrow" aria-hidden="true">↗</span></div>
+              <h2>{{ module.name }}</h2><p>{{ module.description }}</p>
+              <div class="topic-list">@for (topic of module.topics; track topic) { <span>{{ topic }}</span> }</div>
+            </article>
+          } @empty {
+            <div class="empty-state"><span aria-hidden="true">⌕</span><h2>No modules found</h2><p>Try a different search term.</p></div>
+          }
+        </div>
+      </section>
+    } @else {
+      <section class="page">
+        <div class="page-intro">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> OPERATIONAL EXCELLENCE</div>
+          <h1>HANA <span>administration.</span></h1>
+          <p>Build a separate operational skill set for running SAP HANA reliably. Administration is related to HANA development, but it is not the same discipline.</p>
+        </div>
+        <div class="hana-callout">
+          <div class="hana-symbol" aria-hidden="true">H</div>
+          <div><span class="eyebrow">ADMINISTRATION TRACK</span><h2>Keep systems healthy, secure, and recoverable.</h2><p>Study these operational areas in a safe learning environment. Always follow your organization’s procedures in real landscapes.</p></div>
+        </div>
+        <div class="hana-grid">
+          <article class="hana-card"><span class="hana-card-icon">◷</span><h2>Monitoring</h2><p>Understand system health, workload, and alerts to spot issues early.</p><span>System health · Workload · Alerts</span></article>
+          <article class="hana-card"><span class="hana-card-icon">◉</span><h2>Backup &amp; recovery</h2><p>Learn backup concepts and recovery planning to protect business data.</p><span>Backup strategy · Recovery · Validation</span></article>
+          <article class="hana-card"><span class="hana-card-icon">◇</span><h2>Security</h2><p>Explore access controls and operational practices for secure systems.</p><span>Users · Roles · Auditing</span></article>
+          <article class="hana-card"><span class="hana-card-icon">⌘</span><h2>High availability</h2><p>Study resilience patterns that help services remain available.</p><span>Availability · Replication · Continuity</span></article>
+        </div>
+      </section>
+    }
+    <footer class="page-footer"><span>Built for curious minds.</span><span>Learn · Practice · Explain</span></footer>
+  </main>
+</div>
